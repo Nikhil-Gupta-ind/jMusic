@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ public class Player extends AppCompatActivity {
         super.onDestroy();
         mediaPlayer.stop();
         mediaPlayer.release();
+        updateSeek.interrupt();
     }
 
     TextView audioTitle;
@@ -50,6 +52,7 @@ public class Player extends AppCompatActivity {
         Uri uri = Uri.parse(songs.get(position).toString());
         mediaPlayer = MediaPlayer.create(this, uri);
         mediaPlayer.start();
+        play.setImageResource(R.drawable.pause);
 
         //ASA player starts set audio title,
         //play pause image change
@@ -77,9 +80,10 @@ public class Player extends AppCompatActivity {
             public void run() {
                 int currentPosition = 0;
                 try {
-                    while (currentPosition<mediaPlayer.getDuration()){
+                    while (true){
                         currentPosition = mediaPlayer.getCurrentPosition();
                         seekBar.setProgress(currentPosition);
+                        sleep(500);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -87,5 +91,19 @@ public class Player extends AppCompatActivity {
             }
         };
         updateSeek.start();
+
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mediaPlayer.isPlaying()){
+                    play.setImageResource(R.drawable.play);
+                    mediaPlayer.pause();
+                }
+                else {
+                    play.setImageResource(R.drawable.pause);
+                    mediaPlayer.start();
+                }
+            }
+        });
     }
 }
