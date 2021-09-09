@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                     arrayList.addAll(fetchSongs(myFile));
                 }
                 else {
-                    if(myFile.getName().endsWith(".mp3") && !myFile.getName().startsWith(".")){
+                    if(myFile.getName().endsWith(".mp3") || myFile.getName().endsWith(".m4a") && !myFile.getName().startsWith(".")){
                         arrayList.add(myFile);
                     }
                 }

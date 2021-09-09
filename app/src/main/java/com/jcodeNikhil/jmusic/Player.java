@@ -105,5 +105,45 @@ public class Player extends AppCompatActivity {
                 }
             }
         });
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mediaPlayer.stop();
+                mediaPlayer.release();
+                if (position != 0 ){
+                    position = position - 1;
+                }
+                else {
+                    position = songs.size() - 1;
+                }
+                Uri uri = Uri.parse(songs.get(position).toString());
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
+                mediaPlayer.start();
+                play.setImageResource(R.drawable.pause);
+                seekBar.setMax(mediaPlayer.getDuration());
+                textContent = songs.get(position).getName().toString();
+                audioTitle.setText(textContent);
+            }
+        });
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mediaPlayer.stop();
+                mediaPlayer.release();
+                if (position != songs.size()-1){
+                    position = position + 1;
+                }
+                else {
+                    position = 0;
+                }
+                Uri uri = Uri.parse(songs.get(position).toString());
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
+                mediaPlayer.start();
+                play.setImageResource(R.drawable.pause);
+                seekBar.setMax(mediaPlayer.getDuration());
+                textContent = songs.get(position).getName().toString();
+                audioTitle.setText(textContent);
+            }
+        });
     }
 }
