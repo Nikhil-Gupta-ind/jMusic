@@ -25,13 +25,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/audio_title"
-        app:layout_constraintBottom_toTopOf="@+id/imageView2"
+        app:layout_constraintBottom_toTopOf="@+id/albumArt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/albumArt"
         android:layout_width="201dp"
         android:layout_height="201dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -72,7 +72,7 @@
                 android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/maxT"
                 android:layout_width="1dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -90,27 +90,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/previous" />
+                app:srcCompat="@drawable/previous"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground"/>
 
             <ImageView
                 android:id="@+id/play"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/play" />
+                app:srcCompat="@drawable/play"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"/>
 
             <ImageView
                 android:id="@+id/next"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/next" />
+                app:srcCompat="@drawable/next"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground"/>
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/repeat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/repeat" />
+            app:srcCompat="@drawable/repeat"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
