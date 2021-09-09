@@ -23,6 +23,23 @@ public class Player extends AppCompatActivity {
         updateSeek.interrupt();
     }
 
+    private String getTimeString(long millis) {
+        StringBuffer buf = new StringBuffer();
+
+//        int hours = (int) (millis / (1000 * 60 * 60));
+        int minutes = (int) ((millis % (1000 * 60 * 60)) / (1000 * 60));
+        int seconds = (int) (((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000);
+
+        buf
+//                .append(String.format("%02d", hours))
+//                .append(":")
+                .append(String.format("%02d", minutes))
+                .append(":")
+                .append(String.format("%02d", seconds));
+
+        return buf.toString();
+    }
+
     TextView audioTitle , currentT , maxT;
     SeekBar seekBar;
     Thread updateSeek;
@@ -58,15 +75,17 @@ public class Player extends AppCompatActivity {
         mediaPlayer.start();
         play.setImageResource(R.drawable.pause);
 
+        maxT.setText(getTimeString(mediaPlayer.getDuration()));
+//        currentT.setText(getTimeString(position));
         //ASA player starts set audio title,
         //play pause image change
-        //seekbar set max
+        //seekbar set max, timers start
 
         seekBar.setMax(mediaPlayer.getDuration());
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                currentT.setText(getTimeString(seekBar.getProgress()));
             }
 
             @Override
@@ -77,6 +96,7 @@ public class Player extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 mediaPlayer.seekTo(seekBar.getProgress());
+
             }
         });
         updateSeek = new Thread(){
@@ -127,6 +147,7 @@ public class Player extends AppCompatActivity {
                 seekBar.setMax(mediaPlayer.getDuration());
                 textContent = songs.get(position).getName().toString();
                 audioTitle.setText(textContent);
+                maxT.setText(getTimeString(mediaPlayer.getDuration()));
             }
         });
         next.setOnClickListener(new View.OnClickListener() {
@@ -147,6 +168,7 @@ public class Player extends AppCompatActivity {
                 seekBar.setMax(mediaPlayer.getDuration());
                 textContent = songs.get(position).getName().toString();
                 audioTitle.setText(textContent);
+                maxT.setText(getTimeString(mediaPlayer.getDuration()));
             }
         });
         repeat.setOnClickListener(new View.OnClickListener() {
