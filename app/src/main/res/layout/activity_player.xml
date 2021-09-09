@@ -34,7 +34,7 @@
         android:scrollHorizontally="true"
         android:singleLine="true"
         android:fadingEdge="horizontal"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"/>
 
     <ImageView
@@ -43,10 +43,11 @@
         android:layout_height="201dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.547"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/splash" />
+        app:layout_constraintVertical_bias="0.642"
+        app:srcCompat="@drawable/demo_album" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -122,10 +123,10 @@
 
         <ImageView
             android:id="@+id/repeat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/repeat"
+            android:layout_width="36dp"
+            android:layout_height="34dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:background="?attr/selectableItemBackgroundBorderless"/>
+            app:srcCompat="@drawable/repeat" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

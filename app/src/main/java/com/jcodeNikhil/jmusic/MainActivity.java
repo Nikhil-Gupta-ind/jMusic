@@ -9,6 +9,7 @@ package com.jcodeNikhil.jmusic;
 //    // TODO (7) Create Drawer items (not decided)
 //    // TODO (8) Create player activity / swipable drawer like
 //    // TODO (9) Create ui/ux also show album art
+//    // TODO (9) Create album art clickable
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
