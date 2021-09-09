@@ -1,5 +1,14 @@
 package com.jcodeNikhil.jmusic;
 
+//    // TODO (1) Create icon/logo and add colours and pngs.
+//    // TODO (2) Create animated splash screen and welcome screen
+//    // TODO (3) Create welcome screen cards showing feature.
+//    // TODO (4) Create repeat button shuffle/queue
+//    // TODO (5) Create menu items such as favorites, playlists etc. settings activity optional
+//    // TODO (6) Create Search bar
+//    // TODO (7) Create Drawer items (not decided)
+//    // TODO (8) Create player activity / swipable drawer like
+//    // TODO (9) Create ui/ux also show album art
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
