@@ -47,6 +47,7 @@ public class Player extends AppCompatActivity {
         songs = (ArrayList) bundle.getParcelableArrayList("songList");
         textContent = intent.getStringExtra("currentSong");
         audioTitle.setText(textContent);
+        audioTitle.setSelected(true); //marquee effect with xml codes
 
         position = intent.getIntExtra("position", 0);
         Uri uri = Uri.parse(songs.get(position).toString());

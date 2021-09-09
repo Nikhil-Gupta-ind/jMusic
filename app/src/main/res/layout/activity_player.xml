@@ -28,7 +28,14 @@
         app:layout_constraintBottom_toTopOf="@+id/albumArt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:ellipsize="marquee"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:fadingEdge="horizontal"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
 
     <ImageView
         android:id="@+id/albumArt"
