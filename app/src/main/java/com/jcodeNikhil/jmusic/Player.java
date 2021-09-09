@@ -23,10 +23,10 @@ public class Player extends AppCompatActivity {
         updateSeek.interrupt();
     }
 
-    TextView audioTitle;
+    TextView audioTitle , currentT , maxT;
     SeekBar seekBar;
     Thread updateSeek;
-    ImageView play, previous, next;
+    ImageView play, previous, next, repeat;
     ArrayList<File> songs;
     MediaPlayer mediaPlayer;
     String textContent;
@@ -41,6 +41,9 @@ public class Player extends AppCompatActivity {
         play = findViewById(R.id.play);
         previous = findViewById(R.id.previous);
         next = findViewById(R.id.next);
+        currentT = findViewById(R.id.currentT);
+        maxT = findViewById(R.id.maxT);
+        repeat = findViewById(R.id.repeat);
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -84,7 +87,7 @@ public class Player extends AppCompatActivity {
                     while (true){
                         currentPosition = mediaPlayer.getCurrentPosition();
                         seekBar.setProgress(currentPosition);
-                        sleep(500);
+                        sleep(800);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -144,6 +147,25 @@ public class Player extends AppCompatActivity {
                 seekBar.setMax(mediaPlayer.getDuration());
                 textContent = songs.get(position).getName().toString();
                 audioTitle.setText(textContent);
+            }
+        });
+        repeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mediaPlayer.isLooping()){
+                    repeat.setImageResource(R.drawable.repeat);
+                    mediaPlayer.setLooping(false);
+                }
+                else {
+                    repeat.setImageResource(R.drawable.repeat_one);
+                    mediaPlayer.setLooping(true);
+                }
+            }
+        });
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                next.performClick();
             }
         });
     }
