@@ -52,5 +52,40 @@ public class Player extends AppCompatActivity {
         mediaPlayer.start();
 
         //ASA player starts set audio title,
+        //play pause image change
+        //seekbar set max
+
+        seekBar.setMax(mediaPlayer.getDuration());
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mediaPlayer.seekTo(seekBar.getProgress());
+            }
+        });
+        updateSeek = new Thread(){
+            @Override
+            public void run() {
+                int currentPosition = 0;
+                try {
+                    while (currentPosition<mediaPlayer.getDuration()){
+                        currentPosition = mediaPlayer.getCurrentPosition();
+                        seekBar.setProgress(currentPosition);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        updateSeek.start();
     }
 }
