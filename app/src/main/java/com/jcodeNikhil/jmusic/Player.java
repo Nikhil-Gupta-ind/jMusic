@@ -90,7 +90,7 @@ public class Player extends AppCompatActivity {
                     while (true){
                         currentPosition = mediaPlayer.getCurrentPosition();
                         seekBar.setProgress(currentPosition);
-                        sleep(800);
+                        sleep(200);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
