@@ -23,24 +23,7 @@ public class Player extends AppCompatActivity {
         updateSeek.interrupt();
     }
 
-    private String getTimeString(long millis) {
-        StringBuffer buf = new StringBuffer();
-
-//        int hours = (int) (millis / (1000 * 60 * 60));
-        int minutes = (int) ((millis % (1000 * 60 * 60)) / (1000 * 60));
-        int seconds = (int) (((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000);
-
-        buf
-//                .append(String.format("%02d", hours))
-//                .append(":")
-                .append(String.format("%02d", minutes))
-                .append(":")
-                .append(String.format("%02d", seconds));
-
-        return buf.toString();
-    }
-
-    TextView audioTitle , currentT , maxT;
+    TextView audioTitle, currentT , maxT;
     SeekBar seekBar;
     Thread updateSeek;
     ImageView play, previous, next, repeat;
@@ -115,7 +98,6 @@ public class Player extends AppCompatActivity {
             }
         };
         updateSeek.start();
-
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,6 +130,12 @@ public class Player extends AppCompatActivity {
                 textContent = songs.get(position).getName().toString();
                 audioTitle.setText(textContent);
                 maxT.setText(getTimeString(mediaPlayer.getDuration()));
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        next.performClick();
+                    }
+                });
             }
         });
         next.setOnClickListener(new View.OnClickListener() {
@@ -166,9 +154,15 @@ public class Player extends AppCompatActivity {
                 mediaPlayer.start();
                 play.setImageResource(R.drawable.pause);
                 seekBar.setMax(mediaPlayer.getDuration());
-                textContent = songs.get(position).getName().toString();
+                textContent = songs.get(position).getName();
                 audioTitle.setText(textContent);
                 maxT.setText(getTimeString(mediaPlayer.getDuration()));
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        next.performClick();
+                    }
+                });
             }
         });
         repeat.setOnClickListener(new View.OnClickListener() {
@@ -184,6 +178,48 @@ public class Player extends AppCompatActivity {
                 }
             }
         });
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                next.performClick();
+            }
+        });
+    }
+    private String getTimeString(long millis) {
+        StringBuffer buf = new StringBuffer();
+
+//        int hours = (int) (millis / (1000 * 60 * 60));
+        int minutes = (int) ((millis % (1000 * 60 * 60)) / (1000 * 60));
+        int seconds = (int) (((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000);
+
+        buf
+//                .append(String.format("%02d", hours))
+//                .append(":")
+                .append(String.format("%02d", minutes))
+                .append(":")
+                .append(String.format("%02d", seconds));
+
+        return buf.toString();
+    }
+    void startPlayer(){
+        play.setImageResource(R.drawable.pause);
+        seekBar.setMax(mediaPlayer.getDuration());
+        textContent = songs.get(position).getName();
+        audioTitle.setText(textContent);
+        maxT.setText(getTimeString(mediaPlayer.getDuration()));
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                next.performClick();
+            }
+        });
+    }
+    void postStart(){
+        play.setImageResource(R.drawable.pause);
+        seekBar.setMax(mediaPlayer.getDuration());
+        textContent = songs.get(position).getName();
+        audioTitle.setText(textContent);
+        maxT.setText(getTimeString(mediaPlayer.getDuration()));
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
