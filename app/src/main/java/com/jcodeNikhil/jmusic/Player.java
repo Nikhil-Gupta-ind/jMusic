@@ -201,30 +201,4 @@ public class Player extends AppCompatActivity {
 
         return buf.toString();
     }
-    void startPlayer(){
-        play.setImageResource(R.drawable.pause);
-        seekBar.setMax(mediaPlayer.getDuration());
-        textContent = songs.get(position).getName();
-        audioTitle.setText(textContent);
-        maxT.setText(getTimeString(mediaPlayer.getDuration()));
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                next.performClick();
-            }
-        });
-    }
-    void postStart(){
-        play.setImageResource(R.drawable.pause);
-        seekBar.setMax(mediaPlayer.getDuration());
-        textContent = songs.get(position).getName();
-        audioTitle.setText(textContent);
-        maxT.setText(getTimeString(mediaPlayer.getDuration()));
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                next.performClick();
-            }
-        });
-    }
 }
