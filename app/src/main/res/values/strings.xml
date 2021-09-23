@@ -6,4 +6,6 @@
     <string name="jMusic">` jMusic</string>
     <string name="nikhil_gupta">Nikhil Gupta</string>
     <string name="from">From</string>
+    <string name="action_share">Share</string>
+    <string name="action_settings">Settings</string>
 </resources>

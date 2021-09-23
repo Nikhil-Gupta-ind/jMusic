@@ -1,15 +1,20 @@
 package com.jcodeNikhil.jmusic;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -200,5 +205,35 @@ public class Player extends AppCompatActivity {
                 .append(String.format("%02d", seconds));
 
         return buf.toString();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
+        if(id == R.id.settings){
+            Toast.makeText(this, "Coming Soon!", Toast.LENGTH_SHORT).show();
+        }
+        if(id == R.id.share){
+            String textMessage = "https://github.com/jcodeNikhil/jCloud";
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, textMessage);
+            shareIntent.setType("text/plain");
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            // Try to invoke the intent.
+            try {
+                startActivity(Intent.createChooser(shareIntent, "Share jMusic App"));
+            } catch (ActivityNotFoundException e) {
+                // Define what your app should do if no activity can handle the intent.
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
