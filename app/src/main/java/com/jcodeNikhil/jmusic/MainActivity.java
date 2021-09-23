@@ -34,6 +34,11 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+    }
+
     ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
