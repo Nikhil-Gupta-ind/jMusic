@@ -22,6 +22,8 @@ import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     ListView listView;
     TextView textView;
+    Animation animation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,13 +61,16 @@ public class MainActivity extends AppCompatActivity {
         String format = "%1$-14s";
         textView.setText(String.format(format,"Nikhil Gupta")); //String formating in android java
 
-
         Dexter.withContext(this)
                 .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
 //                        Toast.makeText(MainActivity.this, "Storage permission granted", Toast.LENGTH_SHORT).show();
+
+                        animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.listanim);
+                        listView.setAnimation(animation);
+
                         ArrayList<File> mySongs = fetchSongs(Environment.getExternalStorageDirectory());
                         String [] items = new String[mySongs.size()];
                         for (int i=0; i<mySongs.size();i++){
