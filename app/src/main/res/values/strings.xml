@@ -3,7 +3,7 @@
     <string name="my_music">My Music</string>
     <string name="audio_title">Audio Title</string>
     <string name="_00_00">00:00</string>
-    <string name="jMusic">\u0020\u0020\u0020jMusic\u0020</string>
+    <string name="jMusic">`  jMusic\u0020</string>
     <string name="nikhil_gupta">Nikhil Gupta</string>
     <string name="powered">This is</string>
     <string name="action_share">Share</string>
