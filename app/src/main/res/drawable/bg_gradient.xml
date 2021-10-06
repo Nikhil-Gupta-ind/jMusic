@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape android:shape="rectangle" xmlns:android="http://schemas.android.com/apk/res/android">
-    <gradient android:startColor="@color/blue"
+    <gradient android:startColor="#0066FF"
         android:endColor="@color/teal_200"
-        android:angle="225"
-        android:centerColor="@color/blue"/>
+        android:angle="60"
+        android:centerX="300"
+        android:centerColor="#25A9F4"/>
 <!--    <corners android:bottomLeftRadius="30dp"-->
 <!--        android:bottomRightRadius="30dp"/>-->
     <padding android:top="20dp"/>
