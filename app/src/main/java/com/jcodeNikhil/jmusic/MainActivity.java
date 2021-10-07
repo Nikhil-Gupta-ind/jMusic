@@ -16,14 +16,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.karumi.dexter.Dexter;
@@ -44,11 +48,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     ListView listView;
+    TextView textView;
+    Animation animation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listView = findViewById(R.id.listView);
+        textView = findViewById(R.id.textView);
+//        Resources res = getResources();
+//        String text = res.getString(R.string.welcome_messages, "h", 1);
+        String format = "%1$-14s";
+        textView.setText(String.format(format,"Nikhil Gupta")); //String formating in android java
 
         Dexter.withContext(this)
                 .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -56,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
 //                        Toast.makeText(MainActivity.this, "Storage permission granted", Toast.LENGTH_SHORT).show();
+
+                        animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.listanim);
+                        listView.setAnimation(animation);
+
                         ArrayList<File> mySongs = fetchSongs(Environment.getExternalStorageDirectory());
                         String [] items = new String[mySongs.size()];
                         for (int i=0; i<mySongs.size();i++){

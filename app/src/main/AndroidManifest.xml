@@ -19,7 +19,7 @@
         <activity
             android:name=".Splash"
             android:exported="true"
-            android:theme="@style/Splash">
+            android:theme="@style/Theme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +30,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/my_music"
-            android:theme="@style/Theme.JMusic"></activity>
+            android:theme="@style/Theme.JMusic" />
 
         <meta-data
             android:name="preloaded_fonts"
