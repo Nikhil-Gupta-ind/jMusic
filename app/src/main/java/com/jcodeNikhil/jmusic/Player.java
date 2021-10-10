@@ -221,7 +221,7 @@ public class Player extends AppCompatActivity {
             Toast.makeText(this, "Coming Soon!", Toast.LENGTH_SHORT).show();
         }
         if(id == R.id.share){
-            String textMessage = "https://github.com/jcodeNikhil/jCloud";
+            String textMessage = "https://github.com/Nikhil-Gupta-ind/jCloud";
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
             shareIntent.putExtra(Intent.EXTRA_TEXT, textMessage);

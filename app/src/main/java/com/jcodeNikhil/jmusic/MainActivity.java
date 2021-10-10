@@ -26,6 +26,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,10 +52,12 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     TextView textView;
     Animation animation;
+    FrameLayout frameLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        frameLayout = findViewById(R.id.frameLayout);
         listView = findViewById(R.id.listView);
         textView = findViewById(R.id.textView);
 //        Resources res = getResources();
@@ -69,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 //                        Toast.makeText(MainActivity.this, "Storage permission granted", Toast.LENGTH_SHORT).show();
 
                         animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.listanim);
-                        listView.setAnimation(animation);
+                        frameLayout.setAnimation(animation);
 
                         ArrayList<File> mySongs = fetchSongs(Environment.getExternalStorageDirectory());
                         String [] items = new String[mySongs.size()];
@@ -137,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Coming soon!", Toast.LENGTH_SHORT).show();
         }
         if(id == R.id.share){
-            String textMessage = "https://github.com/jcodeNikhil/jCloud";
+            String textMessage = "https://github.com/Nikhil-Gupta-ind/jCloud";
             // Create the text message with a string.
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
