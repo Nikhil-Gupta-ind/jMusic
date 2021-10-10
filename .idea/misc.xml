@@ -7,10 +7,14 @@
         <entry key="..\:/jMusic/app/src/main/res/drawable/bg.xml" value="0.24375" />
         <entry key="..\:/jMusic/app/src/main/res/drawable/bg_gradient.xml" value="0.24375" />
         <entry key="..\:/jMusic/app/src/main/res/drawable/bg_list.xml" value="0.24375" />
+        <entry key="..\:/jMusic/app/src/main/res/drawable/ic_baseline_remove_24.xml" value="0.24375" />
         <entry key="..\:/jMusic/app/src/main/res/drawable/ic_launcher_background.xml" value="0.13703703703703704" />
+        <entry key="..\:/jMusic/app/src/main/res/drawable/list_bg.xml" value="0.24375" />
+        <entry key="..\:/jMusic/app/src/main/res/drawable/list_dragger.xml" value="0.24375" />
+        <entry key="..\:/jMusic/app/src/main/res/drawable/shadow.xml" value="0.24375" />
         <entry key="..\:/jMusic/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/jMusic/app/src/main/res/layout/activity_player.xml" value="0.2234375" />
-        <entry key="..\:/jMusic/app/src/main/res/layout/activity_splash.xml" value="0.2234375" />
+        <entry key="..\:/jMusic/app/src/main/res/layout/activity_splash.xml" value="0.264" />
         <entry key="..\:/jMusic/app/src/main/res/menu/menu.xml" value="0.4" />
       </map>
     </option>
