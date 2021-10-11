@@ -30,7 +30,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="="
-            android:theme="@style/Theme.JMusic" />
+            android:theme="@style/Theme.Home" />
 
         <meta-data
             android:name="preloaded_fonts"
