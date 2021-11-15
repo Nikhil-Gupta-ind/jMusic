@@ -18,7 +18,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/audio_title"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -40,8 +40,8 @@
         android:text="@string/nikhil_gupta"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView3"
-        app:layout_constraintEnd_toEndOf="@+id/textView3" />
+        app:layout_constraintBottom_toBottomOf="@+id/audio_title"
+        app:layout_constraintEnd_toEndOf="@+id/audio_title" />
 
     <TextView
         android:id="@+id/textView2"
@@ -52,8 +52,8 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="italic"
-        app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="@+id/textView3" />
+        app:layout_constraintStart_toStartOf="@+id/audio_title"
+        app:layout_constraintTop_toTopOf="@+id/audio_title" />
 
 
     <FrameLayout
@@ -67,7 +67,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3">
+        app:layout_constraintTop_toBottomOf="@+id/audio_title">
         <ListView
             android:id="@+id/listView"
             android:layout_marginTop="60dp"

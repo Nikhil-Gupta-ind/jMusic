@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -39,7 +40,7 @@ public class Player extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_player);
+        setContentView(R.layout.activity_player2);
 
         audioTitle = findViewById(R.id.audio_title);
         seekBar = findViewById(R.id.seekBar);
@@ -61,7 +62,7 @@ public class Player extends AppCompatActivity {
         Uri uri = Uri.parse(songs.get(position).toString());
         mediaPlayer = MediaPlayer.create(this, uri);
         mediaPlayer.start();
-        play.setImageResource(R.drawable.pause);
+        play.setImageResource(R.drawable.ic_baseline_pause_24);
 
         maxT.setText(getTimeString(mediaPlayer.getDuration()));
 //        currentT.setText(getTimeString(position));
@@ -103,15 +104,44 @@ public class Player extends AppCompatActivity {
             }
         };
         updateSeek.start();
+
+        play.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        //PRESSED
+                        if(mediaPlayer.isPlaying()){
+                            play.setImageResource(R.drawable.ic_baseline_pause_pressed);
+                        }
+                        else {
+                            play.setImageResource(R.drawable.ic_baseline_play_pressed_24);
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        //RELEASED
+                        if(mediaPlayer.isPlaying()){
+                            play.setImageResource(R.drawable.ic_baseline_pause_24);
+                        }
+                        else {
+                            play.setImageResource(R.drawable.ic_baseline_play_arrow_24);
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
+
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mediaPlayer.isPlaying()){
-                    play.setImageResource(R.drawable.play);
+                    play.setImageResource(R.drawable.ic_baseline_play_arrow_24);
                     mediaPlayer.pause();
                 }
                 else {
-                    play.setImageResource(R.drawable.pause);
+                    play.setImageResource(R.drawable.ic_baseline_pause_24);
                     mediaPlayer.start();
                 }
             }
@@ -130,7 +160,7 @@ public class Player extends AppCompatActivity {
                 Uri uri = Uri.parse(songs.get(position).toString());
                 mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
                 mediaPlayer.start();
-                play.setImageResource(R.drawable.pause);
+                play.setImageResource(R.drawable.ic_baseline_pause_24);
                 seekBar.setMax(mediaPlayer.getDuration());
                 textContent = songs.get(position).getName().toString();
                 audioTitle.setText(textContent);
@@ -157,7 +187,7 @@ public class Player extends AppCompatActivity {
                 Uri uri = Uri.parse(songs.get(position).toString());
                 mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
                 mediaPlayer.start();
-                play.setImageResource(R.drawable.pause);
+                play.setImageResource(R.drawable.ic_baseline_pause_24);
                 seekBar.setMax(mediaPlayer.getDuration());
                 textContent = songs.get(position).getName();
                 audioTitle.setText(textContent);

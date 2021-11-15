@@ -11,4 +11,5 @@
 <!--    String formating in xml-->
     <string name="welcome_messages">Hello, %1$s! You have %2$d new messages.</string>
     <string name="app_link">https://github.com/Nikhil-Gupta-ind/jCloud</string>
+    <string name="unknown_artist">Unknown Artist</string>
 </resources>

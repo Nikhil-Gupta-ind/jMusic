@@ -12,11 +12,11 @@ package com.jcodeNikhil.jmusic;
 //    // TODO (9) Create album art clickable
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -26,8 +26,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,18 +51,20 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     TextView textView;
     Animation animation;
-    FrameLayout frameLayout;
+    CardView headerCard;
+    ImageView playAll;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        frameLayout = findViewById(R.id.frameLayout);
+        setContentView(R.layout.activity_main2);
+        headerCard = findViewById(R.id.dashboard_card);
         listView = findViewById(R.id.listView);
         textView = findViewById(R.id.textView);
+        playAll = findViewById(R.id.play_all);
 //        Resources res = getResources();
 //        String text = res.getString(R.string.welcome_messages, "h", 1);
         String format = "%1$-14s";
-        textView.setText(String.format(format,"Nikhil Gupta")); //String formating in android java
+        textView.setText(String.format(format,"Nikhil Gupta")); //String formatting in android java
 
         Dexter.withContext(this)
                 .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 //                        Toast.makeText(MainActivity.this, "Storage permission granted", Toast.LENGTH_SHORT).show();
 
                         animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.listanim);
-                        frameLayout.setAnimation(animation);
+                        headerCard.setAnimation(animation);
 
                         ArrayList<File> mySongs = fetchSongs(Environment.getExternalStorageDirectory());
                         String [] items = new String[mySongs.size()];
@@ -93,11 +94,22 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(intent);
                             }
                         });
+                        playAll.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(MainActivity.this, Player.class);
+                                String currentSong = listView.getItemAtPosition(0).toString();
+                                intent.putExtra("songList", mySongs);
+                                intent.putExtra("currentSong", currentSong);
+                                intent.putExtra("position", 0);
+                                startActivity(intent);
+                            }
+                        });
                     }
 
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-
+                        Toast.makeText(MainActivity.this, "Needs storage permission!", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
