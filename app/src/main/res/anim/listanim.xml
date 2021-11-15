@@ -4,7 +4,7 @@
     android:startOffset="150"
     android:interpolator="@android:anim/accelerate_interpolator">
     <translate
-        android:fromYDelta="-350"
+        android:fromYDelta="150"
         android:toYDelta="0"/>
     <alpha android:fromAlpha="0.9"
         android:toAlpha="1.0"/>

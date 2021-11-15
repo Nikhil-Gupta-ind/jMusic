@@ -26,6 +26,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -51,13 +52,13 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     TextView textView;
     Animation animation;
-    CardView headerCard;
+    FrameLayout frameLayout;
     ImageView playAll;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
-        headerCard = findViewById(R.id.dashboard_card);
+        setContentView(R.layout.activity_main);
+        frameLayout = findViewById(R.id.frameLayout);
         listView = findViewById(R.id.listView);
         textView = findViewById(R.id.textView);
         playAll = findViewById(R.id.play_all);
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 //                        Toast.makeText(MainActivity.this, "Storage permission granted", Toast.LENGTH_SHORT).show();
 
                         animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.listanim);
-                        headerCard.setAnimation(animation);
+                        frameLayout.setAnimation(animation);
 
                         ArrayList<File> mySongs = fetchSongs(Environment.getExternalStorageDirectory());
                         String [] items = new String[mySongs.size()];
