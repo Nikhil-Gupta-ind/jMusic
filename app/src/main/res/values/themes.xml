@@ -38,9 +38,22 @@
         <item name="android:background">@null</item>
         <!-- Support library compatibility -->
         <item name="background">@null</item>
+        <item name="displayOptions">showTitle</item>
+        <item name="logo">@mipmap/ic_launcher_round</item>
     </style>
 
     <style name="Theme.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowFullscreen">true</item>
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
+
+        <!-- specify enter and exit transitions -->
+        <item name="android:windowEnterTransition">@transition/main_transit</item>
+        <item name="android:windowExitTransition">@transition/main_transit</item>
+        <!-- specify shared element transitions -->
+        <item name="android:windowSharedElementEnterTransition">
+            @transition/main_transit</item>
+        <item name="android:windowSharedElementExitTransition">
+            @transition/main_transit</item>
     </style>
 </resources>

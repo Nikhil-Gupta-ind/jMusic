@@ -31,20 +31,22 @@
                 android:textStyle="italic"
                 app:layout_constraintStart_toStartOf="@+id/title"
                 app:layout_constraintTop_toTopOf="@+id/title" />
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="240dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="75dp"
-                android:layout_marginEnd="8dp"
-                android:fontFamily="@font/condiment"
-                android:text="@string/jMusic"
-                android:textColor="@color/white"
-                android:textSize="80dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/condiment"
+        android:text="@string/jMusic"
+        android:textColor="@color/white"
+        android:textSize="80dp"
+        android:transitionName="logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"

@@ -7,12 +7,11 @@ package com.jcodeNikhil.jmusic;
 //    // TODO (5) Create menu items such as favorites, playlists etc. settings activity optional
 //    // TODO (6) Create Search bar
 //    // TODO (7) Create Drawer items (not decided)
-//    // TODO (8) Create player activity / swipable drawer like
+//    // TODO (8) Create player activity / draggable drawer like
 //    // TODO (9) Create ui/ux also show album art
 //    // TODO (9) Create album art clickable
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
@@ -43,11 +42,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
-    @Override
-    public void onBackPressed() {
-        finishAffinity();
-    }
 
     ListView listView;
     TextView textView;
@@ -82,15 +76,13 @@ public class MainActivity extends AppCompatActivity {
                         for (int i=0; i<mySongs.size();i++){
                             items [i] = mySongs.get(i).getName().replace(".mp3", "");
                         }
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, items);
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, items);
                         listView.setAdapter(adapter);
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 Intent intent = new Intent(MainActivity.this, Player.class);
-                                String currentSong = listView.getItemAtPosition(position).toString();
                                 intent.putExtra("songList", mySongs);
-                                intent.putExtra("currentSong", currentSong);
                                 intent.putExtra("position", position);
                                 startActivity(intent);
                             }
@@ -111,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
                         Toast.makeText(MainActivity.this, "Needs storage permission!", Toast.LENGTH_SHORT).show();
+                        finishAffinity();
                     }
 
                     @Override
@@ -169,5 +162,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
     }
 }
