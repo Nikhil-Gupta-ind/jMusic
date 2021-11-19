@@ -2,6 +2,7 @@ package com.jcodeNikhil.jmusic;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,8 +25,11 @@ public class Splash extends AppCompatActivity {
             @Override
             public void run() {
                 Intent intent = new Intent(Splash.this, MainActivity.class);
+//                ActivityOptions options = ActivityOptions
+//                        .makeSceneTransitionAnimation(Splash.this,findViewById(R.id.imageView),"logo");
+//                startActivity(intent,options.toBundle());
                 startActivity(intent);
             }
-        },2000);
+        },1000);
     }
 }

@@ -7,7 +7,7 @@ package com.jcodeNikhil.jmusic;
 //    // TODO (5) Create menu items such as favorites, playlists etc. settings activity optional
 //    // TODO (6) Create Search bar
 //    // TODO (7) Create Drawer items (not decided)
-//    // TODO (8) Create player activity / swipable drawer like
+//    // TODO (8) Create player activity / draggable drawer like
 //    // TODO (9) Create ui/ux also show album art
 //    // TODO (9) Create album art clickable
 import androidx.annotation.NonNull;
@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -27,7 +26,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,15 +43,11 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    @Override
-    public void onBackPressed() {
-        finishAffinity();
-    }
-
     ListView listView;
     TextView textView;
     Animation animation;
     FrameLayout frameLayout;
+    ImageView playAll;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,10 +55,11 @@ public class MainActivity extends AppCompatActivity {
         frameLayout = findViewById(R.id.frameLayout);
         listView = findViewById(R.id.listView);
         textView = findViewById(R.id.textView);
+        playAll = findViewById(R.id.play_all);
 //        Resources res = getResources();
 //        String text = res.getString(R.string.welcome_messages, "h", 1);
         String format = "%1$-14s";
-        textView.setText(String.format(format,"Nikhil Gupta")); //String formating in android java
+        textView.setText(String.format(format,"Nikhil Gupta")); //String formatting in android java
 
         Dexter.withContext(this)
                 .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -80,16 +76,25 @@ public class MainActivity extends AppCompatActivity {
                         for (int i=0; i<mySongs.size();i++){
                             items [i] = mySongs.get(i).getName().replace(".mp3", "");
                         }
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, items);
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, items);
                         listView.setAdapter(adapter);
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 Intent intent = new Intent(MainActivity.this, Player.class);
-                                String currentSong = listView.getItemAtPosition(position).toString();
+                                intent.putExtra("songList", mySongs);
+                                intent.putExtra("position", position);
+                                startActivity(intent);
+                            }
+                        });
+                        playAll.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(MainActivity.this, Player.class);
+                                String currentSong = listView.getItemAtPosition(0).toString();
                                 intent.putExtra("songList", mySongs);
                                 intent.putExtra("currentSong", currentSong);
-                                intent.putExtra("position", position);
+                                intent.putExtra("position", 0);
                                 startActivity(intent);
                             }
                         });
@@ -97,7 +102,8 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-
+                        Toast.makeText(MainActivity.this, "Needs storage permission!", Toast.LENGTH_SHORT).show();
+                        finishAffinity();
                     }
 
                     @Override
@@ -156,5 +162,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
     }
 }
