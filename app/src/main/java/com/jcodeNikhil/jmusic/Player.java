@@ -26,7 +26,7 @@ public class Player extends AppCompatActivity {
     TextView audioTitle, currentT , maxT;
     SeekBar seekBar;
     Thread updateSeek;
-    ImageView play, previous, next, repeat;
+    ImageView play;
     ArrayList<File> songs;
     MediaPlayer mediaPlayer;
     String textContent;
@@ -38,11 +38,8 @@ public class Player extends AppCompatActivity {
         audioTitle = findViewById(R.id.audio_title);
         seekBar = findViewById(R.id.seekBar);
         play = findViewById(R.id.play);
-        previous = findViewById(R.id.previous);
-        next = findViewById(R.id.next);
         currentT = findViewById(R.id.currentT);
         maxT = findViewById(R.id.maxT);
-        repeat = findViewById(R.id.repeat);
 
         //Fetching Data from Main
         Intent intent = getIntent();
@@ -50,23 +47,23 @@ public class Player extends AppCompatActivity {
         songs = (ArrayList) bundle.getParcelableArrayList("songList");
         position = intent.getIntExtra("position", 0);
 
-//        AudioManager am = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-//        int res = am.requestAudioFocus()
-//// Request audio focus for playback
-//        int result = am.requestAudioFocus(afChangeListener,
-//                // Use the music stream.
-//                AudioManager.STREAM_MUSIC,
-//                // Request permanent focus.
-//                AudioManager.AUDIOFOCUS_GAIN);
-//
-//        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-//            // Start playback.
-//        }
-//        if (mediaPlayer.isPlaying()){
-//            mediaPlayer.stop();
-//            mediaPlayer.release();
-//            updateSeek.interrupt();
-//        }
+        /*AudioManager am = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        int res = am.requestAudioFocus()
+        // Request audio focus for playback
+        int result = am.requestAudioFocus(afChangeListener,
+                // Use the music stream.
+                AudioManager.STREAM_MUSIC,
+                // Request permanent focus.
+                AudioManager.AUDIOFOCUS_GAIN);
+
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            // Start playback.
+        }
+        if (mediaPlayer.isPlaying()){
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            updateSeek.interrupt();
+        }*/
         startPlayer(position);
         play.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -109,49 +106,6 @@ public class Player extends AppCompatActivity {
                 }
             }
         });
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mediaPlayer.stop();
-                mediaPlayer.release();
-                updateSeek.interrupt();
-                if (position != songs.size()-1){
-                    position = position + 1;
-                }
-                else {
-                    position = 0;
-                }
-                startPlayer(position);
-            }
-        });
-        previous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mediaPlayer.stop();
-                mediaPlayer.release();
-                updateSeek.interrupt();
-                if (position != 0 ){
-                    position = position - 1;
-                }
-                else {
-                    position = songs.size() - 1;
-                }
-                startPlayer(position);
-            }
-        });
-        repeat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mediaPlayer.isLooping()){
-                    repeat.setImageResource(R.drawable.repeat);
-                    mediaPlayer.setLooping(false);
-                }
-                else {
-                    repeat.setImageResource(R.drawable.repeat_one);
-                    mediaPlayer.setLooping(true);
-                }
-            }
-        });
     }
 
     private void startPlayer(int index){
@@ -167,7 +121,8 @@ public class Player extends AppCompatActivity {
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                next.performClick();
+//                next.performClick();
+                setNext(findViewById(R.id.next));
             }
         });
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -204,6 +159,42 @@ public class Player extends AppCompatActivity {
             }
         };
         updateSeek.start();
+    }
+
+    public void setNext(View view){
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        updateSeek.interrupt();
+        if (position != songs.size()-1){
+            position = position + 1;
+        }
+        else {
+            position = 0;
+        }
+        startPlayer(position);
+    }
+    public void setPrevious(View view){
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        updateSeek.interrupt();
+        if (position != 0 ){
+            position = position - 1;
+        }
+        else {
+            position = songs.size() - 1;
+        }
+        startPlayer(position);
+    }
+    public void setRepeat(View view){
+        ImageView v= (ImageView) view;
+        if (mediaPlayer.isLooping()){
+            v.setImageResource(R.drawable.repeat);
+            mediaPlayer.setLooping(false);
+        }
+        else {
+            v.setImageResource(R.drawable.repeat_one);
+            mediaPlayer.setLooping(true);
+        }
     }
 
     private String getTimeString(long millis) {

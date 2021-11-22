@@ -104,6 +104,7 @@
 
             <ImageView
                 android:id="@+id/previous"
+                android:onClick="setPrevious"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -122,6 +123,7 @@
 
             <ImageView
                 android:id="@+id/next"
+                android:onClick="setNext"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -132,6 +134,7 @@
 
         <ImageView
             android:id="@+id/repeat"
+            android:onClick="setRepeat"
             android:layout_width="36dp"
             android:layout_height="34dp"
             android:background="?attr/selectableItemBackgroundBorderless"
