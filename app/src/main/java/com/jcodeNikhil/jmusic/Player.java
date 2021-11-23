@@ -4,7 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +35,9 @@ public class Player extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     String textContent;
     int position;
+
+    IntentFilter headsetIntentFilter;
+    HeadsetBroadcastReceiver headsetBroadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +113,11 @@ public class Player extends AppCompatActivity {
                 }
             }
         });
+
+        headsetIntentFilter = new IntentFilter();
+        headsetIntentFilter.addAction(Intent.ACTION_HEADSET_PLUG);
+        headsetBroadcastReceiver = new HeadsetBroadcastReceiver();
+        registerReceiver(headsetBroadcastReceiver,headsetIntentFilter);
     }
 
     private void startPlayer(int index){
@@ -255,5 +267,21 @@ public class Player extends AppCompatActivity {
         mediaPlayer.stop();
         mediaPlayer.release();
         updateSeek.interrupt();
+        unregisterReceiver(headsetBroadcastReceiver);
+    }
+
+    private class HeadsetBroadcastReceiver extends BroadcastReceiver{
+        private boolean headsetConnected = false;
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (headsetConnected && intent.getIntExtra("state", 0) == 0){
+                headsetConnected = false;
+                if (mediaPlayer.isPlaying()){
+                    play.performClick();
+                }
+            } else if (!headsetConnected && intent.getIntExtra("state", 0) == 1){
+                headsetConnected = true;
+            }
+        }
     }
 }
