@@ -201,10 +201,28 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<ArrayList<File>> onCreateLoader(int id, @Nullable Bundle args) {
         return new AsyncTaskLoader<ArrayList<File>>(this) {
+            ArrayList<File> mdata; //From To5b.03 PolishAsyncTask
             @Override
             protected void onStartLoading() {
-                progressBar.setVisibility(View.VISIBLE);
-                forceLoad();
+                /*progressBar.setVisibility(View.VISIBLE);
+                forceLoad();*/
+
+                /*
+                 * TO5b.03 If mGithubJson is not null, deliver that result. Otherwise, force a load
+                 * If we already have cached results, just deliver them now. If we don't have any
+                 * cached results, force a load.
+                 */
+                if (mdata != null) {
+                    deliverResult(mdata);
+                } else {
+                    /*
+                     * When we initially begin loading in the background, we want to display the
+                     * loading indicator to the user
+                     */
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    forceLoad();
+                }
             }
 
             @Nullable
@@ -212,6 +230,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public ArrayList<File> loadInBackground() {
                 mySongs = fetchSongs(Environment.getExternalStorageDirectory());
                 return mySongs;
+            }
+
+            //From Polish AsyncTask
+            @Override
+            public void deliverResult(@Nullable ArrayList<File> data) {
+                mdata = data;
+                super.deliverResult(mdata);
             }
         };
     }
