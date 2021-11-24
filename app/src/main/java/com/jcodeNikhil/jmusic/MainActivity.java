@@ -168,6 +168,35 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         finishAffinity();
     }
 
+    private void showMyMusic(){
+        String [] items = new String[mySongs.size()];
+        for (int i=0; i<mySongs.size();i++){
+            String name = mySongs.get(i).getName().toString().replace(".mp3", "");
+            items [i] = (i+1)+".    "+name;
+        }
+        adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, items);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, Player.class);
+                intent.putExtra("songList", mySongs);
+                intent.putExtra("position", position);
+                startActivity(intent);
+            }
+        });
+        playAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Player.class);
+                String currentSong = listView.getItemAtPosition(0).toString();
+                intent.putExtra("songList", mySongs);
+                intent.putExtra("currentSong", currentSong);
+                intent.putExtra("position", 0);
+                startActivity(intent);
+            }
+        });
+    }
     @NonNull
     @Override
     public Loader<ArrayList<File>> onCreateLoader(int id, @Nullable Bundle args) {
@@ -190,40 +219,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(@NonNull Loader<ArrayList<File>> loader, ArrayList<File> data) {
         progressBar.setVisibility(View.INVISIBLE);
-        if (null == data) {
-//            showErrorMessage();
-            Log.d("Control", "onLoadFinished: null");
+        if (data.size() == 0) {
+            //showErrorMessage();
             empty.setVisibility(View.VISIBLE);
         } else {
             /*mSearchResultsTextView.setText(data);
             showJsonDataView();*/
-            Log.d("Control", "onLoadFinished: not null");
-            String [] items = new String[mySongs.size()];
-            for (int i=0; i<mySongs.size();i++){
-                items [i] = mySongs.get(i).getName().replace(".mp3", "");
-            }
-            adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, items);
-            listView.setAdapter(adapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(MainActivity.this, Player.class);
-                    intent.putExtra("songList", mySongs);
-                    intent.putExtra("position", position);
-                    startActivity(intent);
-                }
-            });
-            playAll.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity.this, Player.class);
-                    String currentSong = listView.getItemAtPosition(0).toString();
-                    intent.putExtra("songList", mySongs);
-                    intent.putExtra("currentSong", currentSong);
-                    intent.putExtra("position", 0);
-                    startActivity(intent);
-                }
-            });
+            Log.d("Control", "onLoadFinished: No. of songs "+data.size());
+            showMyMusic();
         }
     }
 
