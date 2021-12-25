@@ -11,12 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class MyMusicRVAdapter extends RecyclerView.Adapter<MyMusicRVAdapter.MusicViewHolder>{
+public class MyMusicRVAdapter extends RecyclerView.Adapter<MyMusicRVAdapter.MusicViewHolder> {
 
     // Member variable to handle the clicks
     final private ItemClickListener mItemClickListener;
     Context context;
     ArrayList<MyMusicData> myMusicArrayList;
+
     //    ArrayList<File> myMusicFiles;
     public MyMusicRVAdapter(ItemClickListener mItemClickListener, Context context, ArrayList<MyMusicData> myMusicArrayList/*, ArrayList<File> myMusicFiles*/) {
         this.mItemClickListener = mItemClickListener;
@@ -28,7 +29,7 @@ public class MyMusicRVAdapter extends RecyclerView.Adapter<MyMusicRVAdapter.Musi
     @NonNull
     @Override
     public MusicViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mymusic_view_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mymusic_view_item, parent, false);
         return new MusicViewHolder(view);
     }
 
@@ -36,7 +37,7 @@ public class MyMusicRVAdapter extends RecyclerView.Adapter<MyMusicRVAdapter.Musi
     public void onBindViewHolder(@NonNull MusicViewHolder holder, int position) {
         //populating data in listItems or here called viewItems
         MyMusicData myMusicData = myMusicArrayList.get(position);
-        holder.tvAudioFileName.setText(myMusicData.getFileName());
+        holder.tvAudioFileName.setText(position + 1 + ". " + myMusicData.getFileName());
     }
 
     @Override
@@ -48,8 +49,9 @@ public class MyMusicRVAdapter extends RecyclerView.Adapter<MyMusicRVAdapter.Musi
         void onItemCLickListener(int pos);
     }
 
-    public class MusicViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MusicViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvAudioFileName;
+
         public MusicViewHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);

@@ -14,9 +14,11 @@ package com.jcodeNikhil.jmusic;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.AsyncTaskLoader;
 import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -59,10 +61,10 @@ public class MainActivity extends AppCompatActivity implements
     ArrayList<MyMusicData> myMusicDataArrayList;
     MyMusicRVAdapter myMusicRVAdapter;
 
-    ListView listView; //
-    TextView textView, empty;
+    //    ListView listView; //
+    TextView textView;
     Animation animation;
-    FrameLayout frameLayout;
+    FrameLayout frameLayout,emptySheet;
     ImageView playAll;
     /*
      * This number will uniquely identify our Loader and is chosen arbitrarily. You can change this
@@ -70,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements
      */
     private static final int FILE_LOADER = 22;
 
-    ArrayList<File> mySongs; //
-    ArrayAdapter<String> adapter; //
+    //    ArrayList<File> mySongs; //
+//    ArrayAdapter<String> adapter; //
     ProgressBar progressBar;
 
     @Override
@@ -79,14 +81,16 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         frameLayout = findViewById(R.id.frameLayout);
-        listView = findViewById(R.id.listView); //
+//        listView = findViewById(R.id.listView); //
         textView = findViewById(R.id.textView);
-//        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         playAll = findViewById(R.id.play_all);
         progressBar = findViewById(R.id.progress_circular);
-        empty = findViewById(R.id.empty);
+        emptySheet = findViewById(R.id.empty_sheet);
+        DividerItemDecoration decoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(decoration);
 
 //        String text = getResources().getString(R.string.welcome_messages, "h", 1);
         String format = "%1$-14s";
@@ -188,10 +192,10 @@ public class MainActivity extends AppCompatActivity implements
         for (int i = 0; i < myMusicFiles.size(); i++) {
             myMusicDataArrayList.add(new MyMusicData(myMusicFiles.get(i)));
         }
-        myMusicRVAdapter = new MyMusicRVAdapter((MyMusicRVAdapter.ItemClickListener) MainActivity.this, getApplicationContext(), myMusicDataArrayList);
+        myMusicRVAdapter = new MyMusicRVAdapter(this, this, myMusicDataArrayList);
         recyclerView.setAdapter(myMusicRVAdapter);
-        /*DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(decoration);*/
+
+
         // For populating the list view
         /*String [] items = new String[mySongs.size()];
         for (int i=0; i<mySongs.size();i++){
@@ -213,8 +217,9 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Player.class);
-                String currentSong = listView.getItemAtPosition(0).toString();
-                intent.putExtra("songList", mySongs);
+//                String currentSong = listView.getItemAtPosition(0).toString();
+                String currentSong = myMusicFiles.get(0).getName().replace(".mp3", "");
+                intent.putExtra("songList", myMusicFiles);
                 intent.putExtra("currentSong", currentSong);
                 intent.putExtra("position", 0);
                 startActivity(intent);
@@ -246,7 +251,6 @@ public class MainActivity extends AppCompatActivity implements
                      * loading indicator to the user
                      */
                     progressBar.setVisibility(View.VISIBLE);
-
                     forceLoad();
                 }
             }
@@ -256,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements
             public ArrayList<File> loadInBackground() {
 //                mySongs = fetchSongs(Environment.getExternalStorageDirectory()); //
                 myMusicFiles = fetchSongs(Environment.getExternalStorageDirectory());
-                return mySongs;
+                return myMusicFiles;
             }
 
             //From Polish AsyncTask
@@ -270,14 +274,15 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(@NonNull Loader<ArrayList<File>> loader, ArrayList<File> data) {
-        progressBar.setVisibility(View.INVISIBLE);
         if (data.size() == 0) {
             //showErrorMessage();
-            empty.setVisibility(View.VISIBLE);
+            emptySheet.setVisibility(View.VISIBLE);
         } else {
             /*mSearchResultsTextView.setText(data);
             showJsonDataView();*/
             Log.d("Control", "onLoadFinished: No. of songs " + data.size());
+            emptySheet.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
             showMyMusic();
         }
     }
@@ -294,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onItemCLickListener(int pos) {
         Intent intent = new Intent(this, Player.class);
         intent.putExtra("songList", myMusicFiles);
-        intent.putExtra("currentSong", myMusicFiles.get(pos).getName().replace(".mp3",""));
+        intent.putExtra("currentSong", myMusicFiles.get(pos).getName().replace(".mp3", ""));
         intent.putExtra("position", pos);
         startActivity(intent);
     }

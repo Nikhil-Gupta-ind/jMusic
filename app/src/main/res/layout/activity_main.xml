@@ -7,19 +7,19 @@
     android:background="@drawable/bg_gradient"
     tools:context=".MainActivity">
 
-<!--    <androidx.cardview.widget.CardView-->
-<!--        android:id="@+id/dashboard_card"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:elevation="0dp"-->
-<!--        app:cardBackgroundColor="@android:color/transparent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:padding="25dp">-->
+    <!--<androidx.cardview.widget.CardView
+        android:id="@+id/dashboard_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:elevation="0dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="25dp">-->
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
@@ -57,8 +57,8 @@
                 android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/title"
                 app:layout_constraintEnd_toEndOf="@+id/title" />
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--    </androidx.cardview.widget.CardView>-->
+        <!--</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>-->
 
     <FrameLayout
         android:orientation="vertical"
@@ -72,27 +72,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title">
-        <ListView
+        <!--<ListView
             android:id="@+id/listView"
             android:layout_marginTop="60dp"
             android:background="@drawable/list_bg"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"/>-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_marginTop="65dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Empty"
-            android:id="@+id/empty"
-            android:visibility="invisible"
-            android:layout_marginTop="150dp"
-            android:layout_gravity="center_horizontal"/>
+        <FrameLayout
+            android:id="@+id/empty_sheet"
+            android:layout_marginTop="60dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
 
+            <TextView
+                android:id="@+id/empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="150dp"
+                android:text="No music found!"
+                android:textSize="16sp" />
+        </FrameLayout>
         <ProgressBar
             android:id="@+id/progress_circular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="invisible"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="150dp"
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/progressbar_round"
             android:layout_gravity="center_horizontal"/>
         <LinearLayout
             android:orientation="vertical"
