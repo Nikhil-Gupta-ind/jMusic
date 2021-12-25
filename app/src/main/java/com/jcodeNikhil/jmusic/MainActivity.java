@@ -10,12 +10,15 @@ package com.jcodeNikhil.jmusic;
 //    // TODO (8) Create player activity / draggable drawer like
 //    // TODO (9) Create ui/ux also show album art
 //    // TODO (9) Create album art clickable
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.AsyncTaskLoader;
 import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
@@ -47,10 +50,17 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import java.io.File;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<File>> {
+public class MainActivity extends AppCompatActivity implements
+        MyMusicRVAdapter.ItemClickListener,
+        LoaderManager.LoaderCallbacks<ArrayList<File>> {
 
-    ListView listView;
-    TextView textView,empty;
+    ArrayList<File> myMusicFiles;
+    RecyclerView recyclerView;
+    ArrayList<MyMusicData> myMusicDataArrayList;
+    MyMusicRVAdapter myMusicRVAdapter;
+
+    ListView listView; //
+    TextView textView, empty;
     Animation animation;
     FrameLayout frameLayout;
     ImageView playAll;
@@ -59,30 +69,34 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * to any number you like, as long as you use the same variable name.
      */
     private static final int FILE_LOADER = 22;
-    ArrayList<File> mySongs;
-    ArrayAdapter<String> adapter;
+
+    ArrayList<File> mySongs; //
+    ArrayAdapter<String> adapter; //
     ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         frameLayout = findViewById(R.id.frameLayout);
-        listView = findViewById(R.id.listView);
+        listView = findViewById(R.id.listView); //
         textView = findViewById(R.id.textView);
+//        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         playAll = findViewById(R.id.play_all);
         progressBar = findViewById(R.id.progress_circular);
         empty = findViewById(R.id.empty);
-//        Resources res = getResources();
-//        String text = res.getString(R.string.welcome_messages, "h", 1);
+
+//        String text = getResources().getString(R.string.welcome_messages, "h", 1);
         String format = "%1$-14s";
-        textView.setText(String.format(format,"Nikhil Gupta")); //String formatting in android java
+        textView.setText(String.format(format, "Nikhil Gupta")); //String formatting in android java
 
         Dexter.withContext(this)
                 .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
-//                        Toast.makeText(MainActivity.this, "Storage permission granted", Toast.LENGTH_SHORT).show();
                         /*perhaps useful instead saveInstance, but it's not working here, something is causing the main activity to destroy and return to splash
                         getSupportLoaderManager().initLoader(FILE_LOADER, null, MainActivity.this);*/
                         animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.listanim);
@@ -91,8 +105,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                         //can be used for reloading list
                         LoaderManager loaderManager = getSupportLoaderManager();
                         Loader<ArrayList<File>> fileLoader = loaderManager.getLoader(FILE_LOADER);
-                        if (fileLoader == null){
-                            loaderManager.initLoader(FILE_LOADER,null,MainActivity.this);
+                        if (fileLoader == null) {
+                            loaderManager.initLoader(FILE_LOADER, null, MainActivity.this);
                         } else {
                             loaderManager.restartLoader(FILE_LOADER, null, MainActivity.this);
                         }
@@ -112,16 +126,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 .check();
     }
 
-    public ArrayList<File> fetchSongs(File file){
+    public ArrayList<File> fetchSongs(File file) {
         ArrayList arrayList = new ArrayList();
-        File [] songs = file.listFiles();
-        if(songs != null){
+        File[] songs = file.listFiles();
+        if (songs != null) {
             for (File myFile : songs) {
-                if (!myFile.isHidden() && myFile.isDirectory()){
+                if (!myFile.isHidden() && myFile.isDirectory()) {
                     arrayList.addAll(fetchSongs(myFile));
-                }
-                else {
-                    if(myFile.getName().endsWith(".mp3") && !myFile.getName().startsWith(".")){
+                } else {
+                    if (myFile.getName().endsWith(".mp3") && !myFile.getName().startsWith(".")) {
                         arrayList.add(myFile);
                     }
                 }
@@ -133,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu,menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -142,10 +155,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         int id = item.getItemId();
 //        int count = 0;
 //        menu item click handling
-        if(id == R.id.settings){
+        if (id == R.id.settings) {
             Toast.makeText(this, "Coming soon!", Toast.LENGTH_SHORT).show();
         }
-        if(id == R.id.share){
+        if (id == R.id.share) {
             String textMessage = "https://github.com/Nikhil-Gupta-ind/jCloud";
             // Create the text message with a string.
             Intent shareIntent = new Intent();
@@ -168,8 +181,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         finishAffinity();
     }
 
-    private void showMyMusic(){
-        String [] items = new String[mySongs.size()];
+    private void showMyMusic() {
+        // To get attributes of file such as name
+        // It works without the model class but I think it can be more helpful in album art n all
+        myMusicDataArrayList = new ArrayList<>();
+        for (int i = 0; i < myMusicFiles.size(); i++) {
+            myMusicDataArrayList.add(new MyMusicData(myMusicFiles.get(i)));
+        }
+        myMusicRVAdapter = new MyMusicRVAdapter((MyMusicRVAdapter.ItemClickListener) MainActivity.this, getApplicationContext(), myMusicDataArrayList);
+        recyclerView.setAdapter(myMusicRVAdapter);
+        /*DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(decoration);*/
+        // For populating the list view
+        /*String [] items = new String[mySongs.size()];
         for (int i=0; i<mySongs.size();i++){
             String name = mySongs.get(i).getName().toString().replace(".mp3", "");
             items [i] = (i+1)+".    "+name;
@@ -184,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 intent.putExtra("position", position);
                 startActivity(intent);
             }
-        });
+        });*/
         playAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,11 +221,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
     }
+
     @NonNull
     @Override
     public Loader<ArrayList<File>> onCreateLoader(int id, @Nullable Bundle args) {
         return new AsyncTaskLoader<ArrayList<File>>(this) {
             ArrayList<File> mdata; //From To5b.03 PolishAsyncTask
+
             @Override
             protected void onStartLoading() {
                 /*progressBar.setVisibility(View.VISIBLE);
@@ -228,7 +254,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Nullable
             @Override
             public ArrayList<File> loadInBackground() {
-                mySongs = fetchSongs(Environment.getExternalStorageDirectory());
+//                mySongs = fetchSongs(Environment.getExternalStorageDirectory()); //
+                myMusicFiles = fetchSongs(Environment.getExternalStorageDirectory());
                 return mySongs;
             }
 
@@ -250,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         } else {
             /*mSearchResultsTextView.setText(data);
             showJsonDataView();*/
-            Log.d("Control", "onLoadFinished: No. of songs "+data.size());
+            Log.d("Control", "onLoadFinished: No. of songs " + data.size());
             showMyMusic();
         }
     }
@@ -261,5 +288,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
          * We aren't using this method in our example application, but we are required to Override
          * it to implement the LoaderCallbacks<String> interface
          */
+    }
+
+    @Override
+    public void onItemCLickListener(int pos) {
+        Intent intent = new Intent(this, Player.class);
+        intent.putExtra("songList", myMusicFiles);
+        intent.putExtra("currentSong", myMusicFiles.get(pos).getName().replace(".mp3",""));
+        intent.putExtra("position", pos);
+        startActivity(intent);
     }
 }
