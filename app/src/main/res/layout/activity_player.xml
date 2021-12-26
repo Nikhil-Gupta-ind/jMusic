@@ -33,7 +33,7 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:scrollHorizontally="true"
         android:singleLine="true"
-        android:text="@string/audio_title"
+        tools:text="Audio tile"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/albumArt"
@@ -79,7 +79,7 @@
                 android:layout_width="1dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/_00_00"
+                tools:text="00:00"
                 android:textAlignment="viewEnd" />
 
             <SeekBar
@@ -93,7 +93,7 @@
                 android:layout_width="1dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/_00_00"
+                tools:text="03:45"
                 android:textAlignment="viewStart" />
         </LinearLayout>
 
