@@ -5,21 +5,112 @@
     android:pivotY="50%"
     android:toDegrees="360">
 
-    <shape
-        android:innerRadiusRatio="3"
-        android:shape="ring"
-        android:thicknessRatio="8"
-        android:useLevel="false">
-        <size
-            android:width="76dip"
-            android:height="76dip"/>
-        <gradient
-            android:angle="0"
-            android:startColor="#00ffffff"
-            android:endColor="@color/new_teal"
-            android:type="sweep"
-            android:useLevel="false"/>
+    <layer-list>
 
-    </shape>
+        <!-- Drop Shadow Stack -->
+        <item>
+            <shape
+                android:innerRadiusRatio="3"
+                android:shape="ring"
+                android:thicknessRatio="6"
+                android:useLevel="false">
+                <solid android:color="#00CCCCCC" />
+            </shape>
+        </item>
+        <item>
+            <shape
+                android:innerRadiusRatio="3"
+                android:shape="ring"
+                android:thicknessRatio="6"
+                android:useLevel="false">
+                <solid android:color="#10CCCCCC" />
+            </shape>
+        </item>
+        <item>
+            <shape
+                android:innerRadiusRatio="3"
+                android:shape="ring"
+                android:thicknessRatio="6"
+                android:useLevel="false">
+                <solid android:color="#20CCCCCC" />
+            </shape>
+        </item>
+        <item>
+            <shape
+                android:innerRadiusRatio="3"
+                android:shape="ring"
+                android:thicknessRatio="6"
+                android:useLevel="false">
+                <solid android:color="#30CCCCCC" />
+            </shape>
+        </item>
+        <item>
+            <shape
+                android:innerRadiusRatio="3"
+                android:shape="ring"
+                android:thicknessRatio="6"
+                android:useLevel="false">
+                <solid android:color="#50CCCCCC" />
+            </shape>
+        </item>
+        <!-- Main Ring -->
+        <item>
+            <shape
+                android:innerRadiusRatio="3"
+                android:shape="ring"
+                android:thicknessRatio="6"
+                android:useLevel="false">
+                <size
+                    android:width="50dip"
+                    android:height="50dip" />
+                <solid android:color="@color/new_teal" />
+
+            </shape>
+        </item>
+        <item>
+            <shape
+                android:innerRadiusRatio="3"
+                android:shape="ring"
+                android:thicknessRatio="6"
+                android:useLevel="false">
+                <size
+                    android:width="50dip"
+                    android:height="50dip" />
+
+                <gradient
+                    android:angle="0"
+                    android:centerColor="#00ffffff"
+                    android:endColor="@color/white"
+                    android:type="sweep"
+                    android:useLevel="false" />
+
+            </shape>
+        </item>
+
+        <item>
+            <rotate
+                android:fromDegrees="-50"
+                android:pivotX="50%"
+                android:pivotY="50%"
+                android:toDegrees="-50">
+                <shape
+                    android:innerRadiusRatio="3"
+                    android:shape="ring"
+                    android:thicknessRatio="6"
+                    android:useLevel="false">
+                    <size
+                        android:width="50dip"
+                        android:height="50dip" />
+
+                    <gradient
+                        android:angle="0"
+                        android:endColor="@color/new_teal"
+                        android:type="sweep"
+                        android:useLevel="false" />
+
+                </shape>
+            </rotate>
+        </item>
+    </layer-list>
 
 </rotate>

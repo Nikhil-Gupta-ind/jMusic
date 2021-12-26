@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements
     MyMusicRVAdapter myMusicRVAdapter;
 
     //    ListView listView; //
-    TextView textView;
+    TextView textView, emptyLabel;
     Animation animation;
     FrameLayout frameLayout,emptySheet;
     ImageView playAll;
@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         playAll = findViewById(R.id.play_all);
         progressBar = findViewById(R.id.progress_circular);
+        emptyLabel = findViewById(R.id.empty);
         emptySheet = findViewById(R.id.empty_sheet);
         DividerItemDecoration decoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(decoration);
@@ -277,6 +278,8 @@ public class MainActivity extends AppCompatActivity implements
         if (data.size() == 0) {
             //showErrorMessage();
             emptySheet.setVisibility(View.VISIBLE);
+            emptyLabel.setVisibility(View.VISIBLE);
+//            progressBar.setVisibility(View.INVISIBLE);
         } else {
             /*mSearchResultsTextView.setText(data);
             showJsonDataView();*/
