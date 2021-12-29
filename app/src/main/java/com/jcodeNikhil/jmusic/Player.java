@@ -8,7 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.AudioManager;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,27 +22,37 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Player extends AppCompatActivity {
 
-    TextView audioTitle, currentT , maxT;
+    private static final String TAG = Player.class.getSimpleName();
+    ImageView play, mAlbumArt;
+    TextView mAudioTitle,mArtist, currentT , maxT;
     SeekBar seekBar;
     Thread updateSeek;
-    ImageView play;
     ArrayList<File> songs;
     MediaPlayer mediaPlayer;
-    String textContent;
-    int position;
+    private int position; // temp variable
+    private Timer sleepTimer;
+    private boolean sleepFlag = false;
 
     IntentFilter headsetIntentFilter;
     HeadsetBroadcastReceiver headsetBroadcastReceiver;
+    private MediaMetadataRetriever retriever;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player2);
-        audioTitle = findViewById(R.id.audio_title);
+        mAlbumArt = findViewById(R.id.iVAlbumArt);
+        mAudioTitle = findViewById(R.id.myMusic_title);
+        mArtist = findViewById(R.id.artist);
         seekBar = findViewById(R.id.seekBar);
         play = findViewById(R.id.play);
         currentT = findViewById(R.id.currentT);
@@ -92,7 +102,7 @@ public class Player extends AppCompatActivity {
                             play.setImageResource(R.drawable.ic_baseline_pause_24);
                         }
                         else {
-                            play.setImageResource(R.drawable.ic_baseline_play_arrow_24);
+                            play.setImageResource(R.drawable.play2);
                         }
                         break;
                 }
@@ -104,7 +114,7 @@ public class Player extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mediaPlayer.isPlaying()){
-                    play.setImageResource(R.drawable.ic_baseline_play_arrow_24);
+                    play.setImageResource(R.drawable.play2);
                     mediaPlayer.pause();
                 }
                 else {
@@ -120,14 +130,82 @@ public class Player extends AppCompatActivity {
         registerReceiver(headsetBroadcastReceiver,headsetIntentFilter);
     }
 
+    /*private byte[] getAlbumArt(String uri){
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(uri.toString());
+        byte[] art = retriever.getEmbeddedPicture();
+        retriever.release();
+        return art;
+    }*/
+
     private void startPlayer(int index){
         Uri uri = Uri.parse(songs.get(index).toString()); //creating uri out of mp3 file
         mediaPlayer = MediaPlayer.create(getApplicationContext(), uri); //initializing media player
         mediaPlayer.start();
         play.setImageResource(R.drawable.ic_baseline_pause_24);
-        textContent = songs.get(index).getName();
-        audioTitle.setText(textContent);
-        audioTitle.setSelected(true);
+
+        // Setting MediaMetaData
+        retriever = new MediaMetadataRetriever();
+        String path = songs.get(index).getPath();
+        retriever.setDataSource(path);
+
+        // load album art image with glide
+        byte[] image = retriever.getEmbeddedPicture();
+        if (image != null){
+            Glide.with(this).asBitmap()
+                    .load(image)
+                    .into(mAlbumArt);
+        } else {
+            Glide.with(this)
+                    .load(R.drawable.demo_album)
+                    .into(mAlbumArt);
+        }
+
+        String title,artist,genre;
+        try {
+            title = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+            if (title != null) mAudioTitle.setText(title);
+            else mAudioTitle.setText(songs.get(index).getName().replace(".mp3", ""));
+
+            artist = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+            if (artist != null) mArtist.setText(artist);
+            else mArtist.setText("Unknown Artist");
+
+            genre = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE);
+            if (genre != null){
+                mArtist.append(" | "+genre);
+            }
+        } catch (Exception e) {
+            mAudioTitle.setText(songs.get(index).getName().replace(".mp3", ""));
+            mArtist.setText("Unknown Artist | Unknown Album");
+        }
+        retriever.release();
+
+        // extra code
+        /*MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+        metaRetriever.setDataSource("string path");
+
+        try {
+            byte[] art = metaRetriever.getEmbeddedPicture();
+            Bitmap songImage = BitmapFactory
+                    .decodeByteArray(art, 0, art.length);
+            mAlbumArt.setImageBitmap(songImage);
+            *//*album.setText(metaRetriver
+                    .extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
+            artist.setText(metaRetriver
+                    .extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
+            genre.setText(metaRetriver
+                    .extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));*//*
+        } catch (Exception e) {
+            mAlbumArt.setBackgroundColor(Color.GRAY);
+            *//*album.setText("Unknown Album");
+            artist.setText("Unknown Artist");
+            genre.setText("Unknown Genre");*//*
+        }*/
+
+//        filename = songs.get(index).getName();
+//        audioTitle.setText(filename);
+        mAudioTitle.setSelected(true);
         seekBar.setMax(mediaPlayer.getDuration());
         maxT.setText(getTimeString(mediaPlayer.getDuration()));
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -251,6 +329,31 @@ public class Player extends AppCompatActivity {
                 startActivity(Intent.createChooser(shareIntent, "Share jMusic App"));
             } catch (ActivityNotFoundException e) {
                 // Define what your app should do if no activity can handle the intent.
+            }
+        }
+        if (id == R.id.sleep){
+            if (!sleepFlag){
+                sleepFlag = true;
+                Toast.makeText(Player.this, "Sleep timer on", Toast.LENGTH_SHORT).show();
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                play.setImageResource(R.drawable.play2);
+                                mediaPlayer.pause();
+                                sleepFlag=false;
+                            }
+                        });
+                    }
+                };
+                sleepTimer = new Timer();
+                sleepTimer.schedule(task,30*60*1000);
+            } else {
+                Toast.makeText(Player.this, "Sleep timer off", Toast.LENGTH_SHORT).show();
+                sleepFlag = false;
+                sleepTimer.cancel();
             }
         }
         return super.onOptionsItemSelected(item);

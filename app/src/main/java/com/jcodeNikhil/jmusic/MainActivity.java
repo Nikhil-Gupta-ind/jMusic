@@ -14,7 +14,6 @@ package com.jcodeNikhil.jmusic;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.AsyncTaskLoader;
 import androidx.loader.content.Loader;
@@ -33,11 +32,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,15 +52,16 @@ public class MainActivity extends AppCompatActivity implements
         MyMusicRVAdapter.ItemClickListener,
         LoaderManager.LoaderCallbacks<ArrayList<File>> {
 
-    ArrayList<File> myMusicFiles;
+    ArrayList<File> myMusicFiles; // stores mp3 files from storage
+    ArrayList<File> myMusicFilesReversed; // stores mp3 files from storage (reversed order)
     RecyclerView recyclerView;
-    ArrayList<MyMusicData> myMusicDataArrayList;
+    ArrayList<MyMusicData> myMusicDataArrayList; // List for storing objects made of mp3 files
     MyMusicRVAdapter myMusicRVAdapter;
 
     //    ListView listView; //
-    TextView textView, emptyLabel;
+    TextView textView, emptyLabel; // textView just to see dynamic string formatting
     Animation animation;
-    FrameLayout frameLayout,emptySheet;
+    FrameLayout frameLayout, emptySheet; // frameLayout to animate
     ImageView playAll;
     /*
      * This number will uniquely identify our Loader and is chosen arbitrarily. You can change this
@@ -73,27 +70,29 @@ public class MainActivity extends AppCompatActivity implements
     private static final int FILE_LOADER = 22;
 
     //    ArrayList<File> mySongs; //
-//    ArrayAdapter<String> adapter; //
+    //    ArrayAdapter<String> adapter; //
     ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        frameLayout = findViewById(R.id.frameLayout);
-//        listView = findViewById(R.id.listView); //
+
         textView = findViewById(R.id.textView);
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         playAll = findViewById(R.id.play_all);
+        frameLayout = findViewById(R.id.frameLayout);
         progressBar = findViewById(R.id.progress_circular);
-        emptyLabel = findViewById(R.id.empty);
         emptySheet = findViewById(R.id.empty_sheet);
+        emptyLabel = findViewById(R.id.empty);
+
+        //listView = findViewById(R.id.listView); //
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
         DividerItemDecoration decoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(decoration);
 
-//        String text = getResources().getString(R.string.welcome_messages, "h", 1);
+        //String text = getResources().getString(R.string.welcome_messages, "h", 1);
         String format = "%1$-14s";
         textView.setText(String.format(format, "Nikhil Gupta")); //String formatting in android java
 
@@ -148,6 +147,11 @@ public class MainActivity extends AppCompatActivity implements
         return arrayList;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.sleep).setVisible(false);
+        return true;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -184,48 +188,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onBackPressed() {
         finishAffinity();
-    }
-
-    private void showMyMusic() {
-        // To get attributes of file such as name
-        // It works without the model class but I think it can be more helpful in album art n all
-        myMusicDataArrayList = new ArrayList<>();
-        for (int i = 0; i < myMusicFiles.size(); i++) {
-            myMusicDataArrayList.add(new MyMusicData(myMusicFiles.get(i)));
-        }
-        myMusicRVAdapter = new MyMusicRVAdapter(this, this, myMusicDataArrayList);
-        recyclerView.setAdapter(myMusicRVAdapter);
-
-
-        // For populating the list view
-        /*String [] items = new String[mySongs.size()];
-        for (int i=0; i<mySongs.size();i++){
-            String name = mySongs.get(i).getName().toString().replace(".mp3", "");
-            items [i] = (i+1)+".    "+name;
-        }
-        adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, items);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, Player.class);
-                intent.putExtra("songList", mySongs);
-                intent.putExtra("position", position);
-                startActivity(intent);
-            }
-        });*/
-        playAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Player.class);
-//                String currentSong = listView.getItemAtPosition(0).toString();
-                String currentSong = myMusicFiles.get(0).getName().replace(".mp3", "");
-                intent.putExtra("songList", myMusicFiles);
-                intent.putExtra("currentSong", currentSong);
-                intent.putExtra("position", 0);
-                startActivity(intent);
-            }
-        });
     }
 
     @NonNull
@@ -269,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements
             public void deliverResult(@Nullable ArrayList<File> data) {
                 mdata = data;
                 super.deliverResult(mdata);
+
             }
         };
     }
@@ -281,8 +244,6 @@ public class MainActivity extends AppCompatActivity implements
             emptyLabel.setVisibility(View.VISIBLE);
 //            progressBar.setVisibility(View.INVISIBLE);
         } else {
-            /*mSearchResultsTextView.setText(data);
-            showJsonDataView();*/
             Log.d("Control", "onLoadFinished: No. of songs " + data.size());
             emptySheet.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
@@ -290,10 +251,71 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    // Takes an arraylist as a parameter and returns
+    // a reversed arraylist
+    public ArrayList<File> reverseArrayList(ArrayList<File> alist)
+    {
+        // Arraylist for storing reversed elements
+        ArrayList<File> revArrayList = new ArrayList<File>();
+        for (int i = alist.size() - 1; i >= 0; i--) {
+
+            // Append the elements in reverse order
+            revArrayList.add(alist.get(i));
+        }
+
+        // Return the reversed arraylist
+        return revArrayList;
+    }
+
+    private void showMyMusic() {
+        // To get attributes of file such as name
+        // It works without the model class but I think it can be more helpful in album art n all
+        /*myMusicDataArrayList = new ArrayList<>();
+        for (int i = 0; i < myMusicFiles.size(); i++) {
+            myMusicDataArrayList.add(new MyMusicData(myMusicFiles.get(i)));
+        }*/
+
+        myMusicFilesReversed = reverseArrayList(myMusicFiles); // also pass in intent
+
+        // passing either object list or file list both works with little changes in adapter
+        myMusicRVAdapter = new MyMusicRVAdapter(this, this, myMusicFilesReversed);
+        recyclerView.setAdapter(myMusicRVAdapter);
+
+        // For populating the list view old code
+        /*String [] items = new String[mySongs.size()];
+        for (int i=0; i<mySongs.size();i++){
+            String name = mySongs.get(i).getName().toString().replace(".mp3", "");
+            items [i] = (i+1)+".    "+name;
+        }
+        adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, items);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, Player.class);
+                intent.putExtra("songList", mySongs);
+                intent.putExtra("position", position);
+                startActivity(intent);
+            }
+        });*/
+        playAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Player.class);
+//                String currentSong = listView.getItemAtPosition(0).toString();
+                String currentSong = myMusicFilesReversed.get(0).getName().replace(".mp3", "");
+                intent.putExtra("songList", myMusicFilesReversed);
+                intent.putExtra("currentSong", currentSong);
+                intent.putExtra("position", 0);
+                startActivity(intent);
+            }
+        });
+    }
+
     @Override
     public void onLoaderReset(@NonNull Loader<ArrayList<File>> loader) {
         /*
-         * We aren't using this method in our example application, but we are required to Override
+         * We aren't using this method in our application, but we are required to Override
          * it to implement the LoaderCallbacks<String> interface
          */
     }
@@ -301,8 +323,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onItemCLickListener(int pos) {
         Intent intent = new Intent(this, Player.class);
-        intent.putExtra("songList", myMusicFiles);
-        intent.putExtra("currentSong", myMusicFiles.get(pos).getName().replace(".mp3", ""));
+        intent.putExtra("songList", myMusicFilesReversed);
+        intent.putExtra("currentSong", myMusicFilesReversed.get(pos).getName().replace(".mp3", ""));
         intent.putExtra("position", pos);
         startActivity(intent);
     }

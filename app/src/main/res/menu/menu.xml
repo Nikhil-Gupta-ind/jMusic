@@ -6,8 +6,12 @@
         android:id="@+id/settings"
         app:showAsAction="never"/>
     <item
+        android:title="Sleep Timer"
+        android:id="@+id/sleep"
+        app:showAsAction="never"/>
+    <item
         android:title="@string/action_share"
         android:id="@+id/share"
         android:icon="@drawable/ic_baseline_share_24"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 </menu>
