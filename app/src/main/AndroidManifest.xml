@@ -15,10 +15,14 @@
         <activity
             android:name=".Player"
             android:exported="true"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".Splash"
             android:exported="true"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,6 +35,8 @@
             android:launchMode="singleTop"
             android:exported="true"
             android:label="="
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Home" />
 
         <meta-data

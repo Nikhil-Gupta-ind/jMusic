@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -154,6 +155,7 @@ public class Player extends AppCompatActivity {
         if (image != null){
             Glide.with(this).asBitmap()
                     .load(image)
+                    .transform(new RoundedCorners(68))
                     .into(mAlbumArt);
         } else {
             Glide.with(this)

@@ -44,27 +44,32 @@
             android:layout_height="match_parent"
             android:id="@+id/constraint2">
 
-            <androidx.cardview.widget.CardView
+            <ImageView
+                android:id="@+id/iVAlbumArt"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="16dp"
                 android:layout_marginHorizontal="40dp"
-                app:cardElevation="24dp"
-                app:cardBackgroundColor="@android:color/white"
-                app:cardCornerRadius="25dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="24dp"
+                android:elevation="8dp"
+                app:srcCompat="@drawable/demo_album"
                 app:layout_constraintBottom_toTopOf="@+id/textView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.521"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/iVAlbumArt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    app:srcCompat="@drawable/demo_album" />
-            </androidx.cardview.widget.CardView>
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="-36dp"
+                app:layout_constraintBottom_toBottomOf="@+id/iVAlbumArt"
+                app:layout_constraintEnd_toEndOf="@+id/iVAlbumArt"
+                app:layout_constraintStart_toStartOf="@+id/iVAlbumArt"
+                app:srcCompat="@drawable/shadow" />
+
 
             <TextView
                 android:id="@+id/textView2"
